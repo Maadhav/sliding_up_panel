@@ -1,6 +1,5 @@
 /*
 Name: Akshath Jain
-Modified By: Maadhav Sharma
 Date: 3/18/2019 - 4/2/2020
 Purpose: Defines the sliding_up_panel widget
 Copyright: © 2020, Akshath Jain. All rights reserved.
@@ -396,23 +395,23 @@ class _SlidingUpPanelState extends State<SlidingUpPanel> with SingleTickerProvid
   // this is because the listener is designed only for use with linking the scrolling of
   // panels and using it for panels that don't want to linked scrolling yields odd results
   Widget _gestureHandler({Widget child}){
-    // if (!widget.isDraggable) return child;
+    if (!widget.isDraggable) return child;
 
-    // if (widget.panel != null){
-    //   return GestureDetector(
-    //     onVerticalDragUpdate: (DragUpdateDetails dets) => _onGestureSlide(dets.delta.dy),
-    //     onVerticalDragEnd: (DragEndDetails dets) => _onGestureEnd(dets.velocity),
-    //     child: child,
-    //   );
-    // }
+    if (widget.panel != null){
+      return GestureDetector(
+        onVerticalDragUpdate: (DragUpdateDetails dets) => _onGestureSlide(dets.delta.dy),
+        onVerticalDragEnd: (DragEndDetails dets) => _onGestureEnd(dets.velocity),
+        child: child,
+      );
+    }
 
     return Listener(
-      // onPointerDown:(!widget.isDraggable)?null: (PointerDownEvent p) => _vt.addPosition(p.timeStamp, p.position),
-      onPointerMove:(!widget.isDraggable)?null: (PointerMoveEvent p){
+      onPointerDown: (PointerDownEvent p) => _vt.addPosition(p.timeStamp, p.position),
+      onPointerMove: (PointerMoveEvent p){
         _vt.addPosition(p.timeStamp, p.position); // add current position for velocity tracking
         _onGestureSlide(p.delta.dy);
       },
-      onPointerUp:(!widget.isDraggable)?null: (PointerUpEvent p) => _onGestureEnd(_vt.getVelocity()),
+      onPointerUp: (PointerUpEvent p) => _onGestureEnd(_vt.getVelocity()),
       child: child,
     );
   }
